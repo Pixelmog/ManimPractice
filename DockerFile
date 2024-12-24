@@ -1,9 +1,26 @@
+# Use the official Manim community Docker image
 FROM manimcommunity/manim:v0.18.1
 
+# Switch to root user to install additional dependencies
 USER root
-RUN pip install notebook
 
+# Install Jupyter Notebook and any additional Python dependencies
+RUN pip install --no-cache-dir notebook ipywidgets matplotlib
+
+# Set arguments for the user
 ARG NB_USER=manimuser
+
+# Switch back to the default user
 USER ${NB_USER}
 
-COPY --chown=manimuser:manimuser . /manim
+# Copy the contents of the current directory into the container (if needed)
+COPY --chown=${NB_USER}:${NB_USER} . /manim
+
+# Set the working directory
+WORKDIR /manim
+
+# Expose the Jupyter Notebook port
+EXPOSE 8888
+
+# Launch Jupyter Notebook on container start
+CMD ["jupyter", "notebook", "--ip=0.0.0.0", "--port=8888", "--no-browser", "--allow-root"]

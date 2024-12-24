@@ -1,8 +1,0 @@
-manim
-notebook
-ipython
-ipywidgets
-matplotlib
-numpy
-pillow
-scipy
